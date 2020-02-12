@@ -1,0 +1,121 @@
+/** User Controller
+ * @module api/controllers
+ */
+
+/**
+ * @namespace userController
+ */
+/**
+ * Loading env variables to application
+ */
+require("dotenv").config;
+const _ = require("lodash");
+/**
+ * An implementation of JSON Web Tokens in Node.JS.
+ * @const
+ */
+const jwt = require("jsonwebtoken");
+/**
+ * Mongoose Model for User.
+ * @const
+ */
+const { User } = require("../models");
+/**
+ * Constants enumerating the HTTP status codes.
+ * @const
+ */
+const HttpStatus = require("http-status-codes");
+const { logger } = require("../../config/logger");
+
+/**
+ * Controller to handle user registration
+ * @name register
+ * @function
+ * @memberof module:api/controllers~userController
+ * @inner
+ * @param {Object} request - Request Object
+ * @param {Object} response - Response Object
+ */
+module.exports.register = async (req, res) => {
+  logger.addContext('route',req.route.path);
+  const {body} = req;
+  const newUser = await User.create({ ...body }, async (err, user) => {
+    if (err) {
+      const {errors} = err
+      logger.error(`${Object.keys(errors)} errors are existed`);
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({errors, message: "-User Cannot be Registed-" });
+    }
+    const responseData = _.pick(user, ["_id", "username", "email", "phone","firstName","lastName","name"])
+    logger.info(`user was registered with the email ${user.email}`);
+    return res
+      .status(HttpStatus.OK)
+      .json({responseData,
+        message: "-User Is Sucessfully Registered-"
+      });
+  });
+};
+
+/**
+ * Controller to handle user Login
+ * @name login
+ * @function
+ * @memberof module:api/controllers~userController
+ * @inner
+ * @param {Object} request - Request Object
+ * @param {Object} response - Response Object
+ */
+module.exports.login = (req, res) => {
+  logger.addContext('route',req.route.path);
+  const {user} = req;
+  if (user !== "error") {
+    const tokenData = {
+      _id: user._id,
+      username: user.username,
+      createdAt: Number(new Date())
+    };
+    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
+    logger.error(`-${user.email} was logged in.-`);
+    return res
+      .status(HttpStatus.OK)
+      .json({ token, message: "User Details Listed." });
+  } else {
+    logger.error(`-${err} errors are existed-`);
+    return res
+      .status(HttpStatus.NOT_ACCEPTABLE)
+      .json({ err, message: "Please Try Again." });
+  }
+};
+
+/**
+ * Controller to handle user account data
+ * @name account
+ * @function
+ * @memberof module:api/controllers~userController
+ * @inner
+ * @param {Object} request - Request Object
+ * @param {Object} response - Response Object
+ */
+module.exports.account = async (req, res) => {
+  logger.addContext('route',req.route.path);
+  const { user } = req;
+  const responseData = _.pick(user, ["_id", "username", "email", "phone","firstName","lastName","name"])
+  logger.info(`-${responseData.email} was given his profile information in.-`);
+  return res
+    .status(HttpStatus.OK)
+    .json({responseData,message: '-User data sucessfully dispatched-'})
+};  
+
+/**
+ * Controller to handle user logout
+ * @name logout
+ * @function
+ * @memberof module:api/controllers~userController
+ * @inner
+ * @param {Object} request - Request Object
+ * @param {Object} response - Response Object
+ */
+module.exports.logout = (req, res) => {
+  res.json("User is logged Out");
+};
