@@ -27,6 +27,7 @@ const HttpStatus = require("http-status-codes");
  */
 const cors = require("cors");
 const app = express();
+const path = require("path")
 /**
  * Cross Origin Resource Sharing (CORS) allows us to use Web applications within browsers when domains aren't the same
  * @function
@@ -66,7 +67,7 @@ http.listen(3001, () => {
 io.on("connection", socket => {
   consoleLogger.info("Client Connected");
   socket.on("event", event => {
-    consoleLogger.info(event);
+    console.log(event);
   });
   socket.on("disconnect", () => {
     consoleLogger.warn("Client disconnected");
@@ -110,6 +111,13 @@ app.get("/", (req, res) => {
  * @param {object} router - Express Router
  */
 app.use("/user", router);
+
+app.use(express.static(path.join(__dirname,"client/build")))
+
+app.get("*", (req,res) =>{
+    res.sendFile(path.join(__dirname + "/client/build/index.html"))
+})
+
 app.listen(port, () => {
   consoleLogger.info("Listening on port", port);
 });

@@ -19,8 +19,10 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    let newArray = []
     const socket = io(CHAT_SERVICES);
-    socket.on("connection", () => {console.log('HEllo')});
+    socket.on("event", (event) => {return newArray.push(event)});
+    console.log(newArray)
   }
   handlePagination = e => {
     const { name } = e.target;

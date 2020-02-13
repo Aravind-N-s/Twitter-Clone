@@ -43,15 +43,11 @@ class RegisterContainer extends Component {
     authAxios
       .post(`/user/register`, formData)
       .then(response => {
-        alert({response})
         if (response.data.errors) {
           alert(response.data.errors);
         } else {
-          const token = response.data.token;
-          if (token) {
-            localStorage.setItem("userAuthToken", token);
-            this.props.history.push("/users/login");
-          }
+          Swal.fire("Please Login")
+          this.props.history.push("/users/login");
         }
       })
       .catch(err => {

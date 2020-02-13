@@ -33,7 +33,7 @@ const { User } = require("../models");
  */
 const HttpStatus = require("http-status-codes");
 const { logger, consoleLogger } = require("../../config/logger");
-const {socket, io} = require("../../index")
+const { socket, io } = require("../../index");
 /**
  * Controller to handle user registration
  * @name register
@@ -131,21 +131,21 @@ module.exports.account = async (req, res) => {
 module.exports.search = async (req, res) => {
   logger.addContext("route", req.route.path);
   const { searchTerm } = req.body;
-  let params = { q: searchTerm, count:100 };
-  client.get('search/tweets',params, (error, tweets) => {
+  let params = { q: searchTerm, count: 100 };
+  client.get("search/tweets", params, (error, tweets) => {
     if (!error) {
-      res.json(tweets)
-    }else{
-      consoleLogger.fatal({error})
-      res.send(error)}
+      res.json(tweets);
+    } else {
+      consoleLogger.fatal({ error });
+      res.send(error);
+    }
   });
-  let stream = client.stream("statuses/filter", {track: searchTerm});
-  stream.on("data", (event) => {
-    console.log(event.text, 'evv')
-    io.emit('event',event)
+  let stream = client.stream("statuses/filter", { track: searchTerm });
+  stream.on("data", event => {
+    io.emit("event", event);
   });
-  stream.on('error', function(error) {
-    console.log(error,'err');
+  stream.on("error", function(error) {
+    console.log(error, "err");
   });
 };
 /**
