@@ -67,7 +67,7 @@ http.listen(3001, () => {
 io.on("connection", socket => {
   consoleLogger.info("Client Connected");
   socket.on("event", event => {
-    console.log(event);
+    consoleLogger.info(event);
   });
   socket.on("disconnect", () => {
     consoleLogger.warn("Client disconnected");

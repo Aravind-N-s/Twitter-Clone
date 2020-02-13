@@ -162,7 +162,7 @@ module.exports.search = async (req, res) => {
     io.emit("event", event);
   });
   stream.on("error", function(error) {
-    console.log(error, "err");
+    consoleLogger.warn(error, "err");
   });
 };
 /**

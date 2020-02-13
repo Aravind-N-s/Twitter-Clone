@@ -29,6 +29,12 @@ export const addTweets = data => {
   };
 };
 
+export const updateTweets = data =>{
+  return {
+    type: "UPDATE_TWEETS",
+    payload: data
+  }
+}
 export const resetTweets = () => {
   return { type: "RESET_TWEETS" };
 };

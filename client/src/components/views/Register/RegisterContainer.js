@@ -51,7 +51,6 @@ class RegisterContainer extends Component {
         }
       })
       .catch(err => {
-        console.log({err})
         const {errors} = err.response.data
         if(errors){
           Swal.fire('Email Is Already Registered with us please Login')

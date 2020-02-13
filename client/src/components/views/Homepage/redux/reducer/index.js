@@ -4,6 +4,9 @@ const tweetsReducer = (state = initialState, action) => {
     case "SET_TWEETS": {
       return [...action.payload];
     }
+    case "UPDATE_TWEETS": {
+      return [action.payload, ...state]
+    }
     case "RESET_TWEETS": {
       return [];
     }

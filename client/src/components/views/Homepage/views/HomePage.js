@@ -5,7 +5,7 @@ import ViewTweet from "./ViewTweets";
 import io from "socket.io-client";
 import Swal from "sweetalert2";
 import { connect } from "react-redux";
-import { startAddTweets } from "../redux/action";
+import { startAddTweets, updateTweets } from "../redux/action";
 import { CHAT_SERVICES } from "../../../utils/urls";
 
 class HomePage extends Component {
@@ -20,8 +20,10 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    const {dispatch} = this.props
     const socket = io(CHAT_SERVICES);
     socket.on("event", event => {
+      dispatch(updateTweets(event))
       if (event) {
         const Toast = Swal.mixin({
           toast: true,
@@ -35,8 +37,8 @@ class HomePage extends Component {
         });
 
         Toast.fire({
-          icon: "success",
-          title: "Please Click Refresh Button For New Tweets"
+          icon: "info",
+          title: "New Tweet Available"
         });
       }
     });
@@ -75,7 +77,6 @@ class HomePage extends Component {
   render() {
     const { tweets } = this.props;
     const { pageNumber } = this.state;
-    console.log(this.state)
     return (
       <Fragment>
         <div className="container">

@@ -48,7 +48,7 @@ npm run doc
 view the output at the docs folder in the root directory.
 
 #### Issues
-- User has to click refresh/Load more button to read the new tweet as it isnt auto updated.
+- CORS not working for sockets in Chrome.
 - AWS isn't hosted.
 
 # License
