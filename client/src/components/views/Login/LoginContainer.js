@@ -67,8 +67,6 @@ class LoginContainer extends Component {
             });
             dispatch(setToken());
             localStorage.setItem("userAuthToken", token);
-            // dispatch(startAddURL());
-            // alert("Welcome to the App");
             this.props.history.push("/homepage");
           }
         }

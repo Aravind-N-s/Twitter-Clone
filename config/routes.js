@@ -56,5 +56,5 @@ router.post('/login',passport.authenticate('local',{session:false}),usercontroll
  * @param {callback} middleware - Express middleware.
  */
 router.get('/account',passport.authenticate('jwt',{session:false}), usercontroller.account)
-
+router.post('/stream',passport.authenticate('jwt',{session:false}), usercontroller.search)
 module.exports = router

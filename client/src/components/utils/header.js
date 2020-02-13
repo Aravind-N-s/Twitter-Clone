@@ -12,7 +12,7 @@ export const Header = props => {
           {props.name == "HomePage" ? (
             <div className="row">
               <h1 className="col-md-4">{props.name}</h1>
-              <div className="col-md-4 ml-auto">
+              <div className="col-md-4 ml-auto" style={{padding:"1%"}}>
                 <button
                   onClick={() => {
                     props.logout();

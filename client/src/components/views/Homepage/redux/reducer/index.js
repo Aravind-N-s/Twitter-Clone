@@ -1,10 +1,10 @@
 const initialState=[]
-const urlReducer = (state = initialState, action) => {
+const tweetsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_URL": {
+    case "SET_TWEETS": {
       return [...action.payload];
     }
-    case "RESET_URL": {
+    case "RESET_TWEETS": {
       return [];
     }
     default:
@@ -12,4 +12,4 @@ const urlReducer = (state = initialState, action) => {
   }
 };
 
-export default urlReducer;
+export default tweetsReducer            ;

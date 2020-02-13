@@ -10,6 +10,13 @@
  */
 require("dotenv").config;
 const _ = require("lodash");
+const Twitter = require("twitter");
+const client = new Twitter({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  access_token_key: process.env.ACCESS_TOKEN,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET
+});
 /**
  * An implementation of JSON Web Tokens in Node.JS.
  * @const
@@ -25,8 +32,8 @@ const { User } = require("../models");
  * @const
  */
 const HttpStatus = require("http-status-codes");
-const { logger } = require("../../config/logger");
-
+const { logger, consoleLogger } = require("../../config/logger");
+const {socket, io} = require("../../index")
 /**
  * Controller to handle user registration
  * @name register
@@ -37,23 +44,29 @@ const { logger } = require("../../config/logger");
  * @param {Object} response - Response Object
  */
 module.exports.register = async (req, res) => {
-  logger.addContext('route',req.route.path);
-  const {body} = req;
+  logger.addContext("route", req.route.path);
+  const { body } = req;
   const newUser = await User.create({ ...body }, async (err, user) => {
     if (err) {
-      const {errors} = err
+      const { errors } = err;
       logger.error(`${Object.keys(errors)} errors are existed`);
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
-        .json({errors, message: "-User Cannot be Registed-" });
+        .json({ errors, message: "-User Cannot be Registed-" });
     }
-    const responseData = _.pick(user, ["_id", "username", "email", "phone","firstName","lastName","name"])
+    const responseData = _.pick(user, [
+      "_id",
+      "username",
+      "email",
+      "phone",
+      "firstName",
+      "lastName",
+      "name"
+    ]);
     logger.info(`user was registered with the email ${user.email}`);
     return res
       .status(HttpStatus.OK)
-      .json({responseData,
-        message: "-User Is Sucessfully Registered-"
-      });
+      .json({ responseData, message: "-User Is Sucessfully Registered-" });
   });
 };
 
@@ -67,8 +80,8 @@ module.exports.register = async (req, res) => {
  * @param {Object} response - Response Object
  */
 module.exports.login = (req, res) => {
-  logger.addContext('route',req.route.path);
-  const {user} = req;
+  logger.addContext("route", req.route.path);
+  const { user } = req;
   if (user !== "error") {
     const tokenData = {
       _id: user._id,
@@ -98,15 +111,43 @@ module.exports.login = (req, res) => {
  * @param {Object} response - Response Object
  */
 module.exports.account = async (req, res) => {
-  logger.addContext('route',req.route.path);
+  logger.addContext("route", req.route.path);
   const { user } = req;
-  const responseData = _.pick(user, ["_id", "username", "email", "phone","firstName","lastName","name"])
+  const responseData = _.pick(user, [
+    "_id",
+    "username",
+    "email",
+    "phone",
+    "firstName",
+    "lastName",
+    "name"
+  ]);
   logger.info(`-${responseData.email} was given his profile information in.-`);
   return res
     .status(HttpStatus.OK)
-    .json({responseData,message: '-User data sucessfully dispatched-'})
-};  
+    .json({ responseData, message: "-User data sucessfully dispatched-" });
+};
 
+module.exports.search = async (req, res) => {
+  logger.addContext("route", req.route.path);
+  const { searchTerm } = req.body;
+  let params = { q: searchTerm, count:100 };
+  client.get('search/tweets',params, (error, tweets) => {
+    if (!error) {
+      res.json(tweets)
+    }else{
+      consoleLogger.fatal({error})
+      res.send(error)}
+  });
+  let stream = client.stream("statuses/filter", {track: searchTerm});
+  stream.on("data", (event) => {
+    console.log(event.text, 'evv')
+    io.emit('event',event)
+  });
+  stream.on('error', function(error) {
+    console.log(error,'err');
+  });
+};
 /**
  * Controller to handle user logout
  * @name logout

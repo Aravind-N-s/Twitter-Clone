@@ -1,17 +1,19 @@
-import { urlAxios } from "../../../../utils/axios";
-export const startAddURL = () => {
+import { authAxios } from "../../../../utils/axios";
+export const startAddTweets = data => {
   return dispatch => {
-    urlAxios
-      .get("shortservices/chartAllURL", {
-        headers: {
-          Authorization: `${localStorage.getItem("userAuthToken")}`
-        }
-      })
+    authAxios
+      .post("user/stream",{searchTerm: data},
+        {headers: {
+          "Authorization": `JWT ${localStorage.getItem("userAuthToken")}`
+        }}
+        
+      )
       .then(response => {
         if (response.data.hasOwnProperty("errors")) {
           alert(response.data.message);
         } else {
-          dispatch(addURL(response.data.shortenedURLs));
+          dispatch(resetTweets());
+          dispatch(addTweets(response.data.statuses));
         }
       })
       .catch(err => {
@@ -20,13 +22,13 @@ export const startAddURL = () => {
   };
 };
 
-export const addURL = data => {
+export const addTweets = data => {
   return {
-    type: "SET_URL",
+    type: "SET_TWEETS",
     payload: data
   };
 };
 
-export const resetURL = () => {
-  return { type: "RESET_URL" };
+export const resetTweets = () => {
+  return { type: "RESET_TWEETS" };
 };

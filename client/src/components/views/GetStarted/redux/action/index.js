@@ -10,7 +10,7 @@ export const startAddUser = () => {
       })
       .then(response => {
         if (response.data.hasOwnProperty("errors")) {
-          alert(response.data.message);
+          alert(response.data.message,'message');
         } else {
           dispatch(addUser(response.data));
         }
