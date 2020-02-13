@@ -36,7 +36,7 @@ class HomePage extends Component {
 
         Toast.fire({
           icon: "success",
-          title: "New Tweet Is Avaiable please Refresh"
+          title: "Please Click Refresh Button For New Tweets"
         });
       }
     });

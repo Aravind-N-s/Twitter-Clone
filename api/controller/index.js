@@ -97,12 +97,12 @@ module.exports.login = (req, res) => {
       createdAt: Number(new Date())
     };
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
-    logger.error(`-${user.email} was logged in.-`);
+    logger.info(`-${user.email} was logged in.-`);
     return res
       .status(HttpStatus.OK)
       .json({ token, message: "User Details Listed." });
   } else {
-    logger.error(`-${err} errors are existed-`);
+    logger.error(`-errors are existed-`);
     return res
       .status(HttpStatus.NOT_ACCEPTABLE)
       .json({ err, message: "Please Try Again." });
