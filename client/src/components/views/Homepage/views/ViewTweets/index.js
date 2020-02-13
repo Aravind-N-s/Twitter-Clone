@@ -10,6 +10,9 @@ const ViewTweet = props => {
         <h4 style={{padding: "25%"}}>Create A Search Request</h4>
       ) : (
         <div>
+          <button style={{width: '100%',marginBottom: "2%"}} name="true" onClick={onHandlePagination}>
+              Refresh
+            </button>
           {newTweet.map(x => {
             return (
               <div key={x.id} className="card" style={{marginBottom: "2%" }}>

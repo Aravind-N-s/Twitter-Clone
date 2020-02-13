@@ -112,6 +112,15 @@ app.get("/", (req, res) => {
  */
 app.use("/user", router);
 
+/**
+ * Routes for hosting.
+ * @function
+ * @name use
+ * @memberof module:server/app~appServer
+ * @inner
+ * @param {function} root - Root Route
+ * @param {object} router - Express Router
+ */
 app.use(express.static(path.join(__dirname,"client/build")))
 
 app.get("*", (req,res) =>{

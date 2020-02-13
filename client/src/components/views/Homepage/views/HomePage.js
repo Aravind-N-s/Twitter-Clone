@@ -3,9 +3,10 @@ import { isValid } from "../../../utils/service";
 import SearchField from "./CreateSearchRequest";
 import ViewTweet from "./ViewTweets";
 import io from "socket.io-client";
+import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import { startAddTweets } from "../redux/action";
-import {CHAT_SERVICES} from '../../../utils/urls'
+import { CHAT_SERVICES } from "../../../utils/urls";
 
 class HomePage extends Component {
   constructor(props) {
@@ -14,22 +15,40 @@ class HomePage extends Component {
       searchData: "",
       searchDataError: "",
       pageNumber: 0,
-      response: []
+      prevSearch: ""
     };
   }
 
   componentDidMount() {
-    let newArray = []
     const socket = io(CHAT_SERVICES);
-    socket.on("event", (event) => {return newArray.push(event)});
-    console.log(newArray)
+    socket.on("event", event => {
+      if (event) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-left",
+          showConfirmButton: false,
+          timer: 1500,
+          onOpen: toast => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          }
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "New Tweet Is Avaiable please Refresh"
+        });
+      }
+    });
   }
   handlePagination = e => {
     const { name } = e.target;
+    const { dispatch } = this.props;
+    const { prevSearch } = this.state;
     if (name === "false") {
       this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
     } else {
-      this.setState(prevState => ({ pageNumber: prevState.pageNumber - 1 }));
+      dispatch(startAddTweets(prevSearch));
     }
   };
   handleChange = e => {
@@ -47,13 +66,16 @@ class HomePage extends Component {
     });
     if (searchDataError) return;
     dispatch(startAddTweets(searchData));
-    this.setState({ searchData: "" });
+    this.setState(prevState => ({
+      prevSearch: prevState.searchData,
+      searchData: ""
+    }));
   };
 
   render() {
     const { tweets } = this.props;
     const { pageNumber } = this.state;
-    console.log(this.state,'state')
+    console.log(this.state)
     return (
       <Fragment>
         <div className="container">

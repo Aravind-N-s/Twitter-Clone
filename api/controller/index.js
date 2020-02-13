@@ -32,8 +32,16 @@ const { User } = require("../models");
  * @const
  */
 const HttpStatus = require("http-status-codes");
+/**
+ * Constants having logger function.
+ * @const
+ */
 const { logger, consoleLogger } = require("../../config/logger");
-const { socket, io } = require("../../index");
+/**
+ * Socket values imported from index
+ * @const
+ */
+const { io } = require("../../index");
 /**
  * Controller to handle user registration
  * @name register
@@ -128,6 +136,15 @@ module.exports.account = async (req, res) => {
     .json({ responseData, message: "-User data sucessfully dispatched-" });
 };
 
+/**
+ * Controller to handle user queries
+ * @name account
+ * @function
+ * @memberof module:api/controllers~userController
+ * @inner
+ * @param {Object} request - Request Object
+ * @param {Object} response - Response Object
+ */
 module.exports.search = async (req, res) => {
   logger.addContext("route", req.route.path);
   const { searchTerm } = req.body;
@@ -150,6 +167,7 @@ module.exports.search = async (req, res) => {
 };
 /**
  * Controller to handle user logout
+ * Not Used
  * @name logout
  * @function
  * @memberof module:api/controllers~userController
