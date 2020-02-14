@@ -62,8 +62,9 @@ module.exports = {
 const passport = require("passport");
 const router = require("./config/routes");
 
-http.listen(port, () => {
-  consoleLogger.info(`Socket Connected at port : ${port}`);
+const port1 = process.env.PORT1
+http.listen(port1, () => {
+  consoleLogger.info(`Socket Connected at port : ${port1}`);
 });
 io.on("connection", socket => {
   consoleLogger.info("Client Connected");
