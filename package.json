@@ -8,7 +8,8 @@
     "start": "node index.js",
     "nodemon": "nodemon index.js",
     "doc": "jsdoc -c ./.jsdoc.conf.json",
-    "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" "
+    "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "engines": {
     "node": "10.3.0",
