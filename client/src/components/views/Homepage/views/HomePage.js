@@ -23,42 +23,44 @@ class HomePage extends Component {
     const {dispatch} = this.props
     const socket = io(CHAT_SERVICES);
     socket.on("event", event => {
-      dispatch(updateTweets(event))
       if (event) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "bottom-left",
-          showConfirmButton: false,
-          timer: 1500,
-          onOpen: toast => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          }
-        });
+        // const Toast = Swal.mixin({
+        //   toast: true,
+        //   position: "bottom-left",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        //   onOpen: toast => {
+        //     toast.addEventListener("mouseenter", Swal.stopTimer);
+        //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+        //   }
+        // });
 
-        Toast.fire({
-          icon: "info",
-          title: "New Tweet Available"
-        });
+        // Toast.fire({
+        //   icon: "info",
+        //   title: "New Tweet Available"
+        // });
+        alert("NEW REQ")
       }
+      dispatch(updateTweets(event))
     });
     socket.on("err", error => {
       if (error) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "bottom-left",
-          showConfirmButton: false,
-          timer: 1500,
-          onOpen: toast => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          }
-        });
+        // const Toast = Swal.mixin({
+        //   toast: true,
+        //   position: "bottom-left",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        //   onOpen: toast => {
+        //     toast.addEventListener("mouseenter", Swal.stopTimer);
+        //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+        //   }
+        // });
 
-        Toast.fire({
-          icon: "error",
-          title: "Too Many Requests"
-        });
+        // Toast.fire({
+        //   icon: "error",
+        //   title: "Too Many Requests"
+        // });
+        alert('err')
       }
     });
   }
