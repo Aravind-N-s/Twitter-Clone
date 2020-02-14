@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 10000",
-    "start": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
+    "start": "node index.js",
     "nodemon": "nodemon index.js",
     "doc": "jsdoc -c ./.jsdoc.conf.json",
     "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
@@ -37,15 +37,15 @@
     "passport-local": "^1.0.0",
     "socket.io": "^2.3.0",
     "twitter": "^1.7.1",
-    "validator": "^11.1.0",
-    "concurrently": "^5.1.0",
-    "nodemon": "^2.0.2"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "concurrently": "^5.1.0",
     "jsdoc": "^3.6.3",
     "mocha": "^7.0.1",
+    "nodemon": "^2.0.2",
     "react-native-slowlog": "^1.0.2"
   }
 }
