@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 10000",
-    "start": "node index.js",
+    "start": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
+    "install": "cd client && npm run build",
     "nodemon": "nodemon index.js",
     "doc": "jsdoc -c ./.jsdoc.conf.json",
     "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
+    "heroku-prebuild": "npm install",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "engines": {
