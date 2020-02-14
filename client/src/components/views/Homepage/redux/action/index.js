@@ -1,7 +1,7 @@
-import { authAxios } from "../../../../utils/axios";
+import { chatAxios } from "../../../../utils/axios";
 export const startAddTweets = data => {
   return dispatch => {
-    authAxios
+    chatAxios
       .post("user/stream",{searchTerm: data},
         {headers: {
           "Authorization": `JWT ${localStorage.getItem("userAuthToken")}`
