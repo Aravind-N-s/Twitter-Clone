@@ -10,7 +10,6 @@
     "nodemon": "nodemon index.js",
     "doc": "jsdoc -c ./.jsdoc.conf.json",
     "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
-    "heroku-prebuild": "npm install",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "engines": {
