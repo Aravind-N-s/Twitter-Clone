@@ -97,11 +97,6 @@ require("./api/middlewares/passport-jwt");
  * @param {callback} - request,response of the route
  */
 
-app.get("/", (req, res) => {
-  return res
-    .status(HttpStatus.OK)
-    .json({ message: ".AuthServices is active." });
-});
 /**
  * Serving Routes
  * @function
