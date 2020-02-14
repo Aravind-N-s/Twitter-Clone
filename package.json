@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha --timeout 10000",
     "start": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
-    "install": "cd client && npm run build",
     "nodemon": "nodemon index.js",
     "doc": "jsdoc -c ./.jsdoc.conf.json",
     "dev": "concurrently \"nodemon index.js\" \"npm start --prefix=client\" ",
