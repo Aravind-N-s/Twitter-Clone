@@ -23,6 +23,7 @@ class HomePage extends Component {
     const {dispatch} = this.props
     const socket = io(CHAT_SERVICES);
     socket.on("event", event => {
+      console.log({event})
       if (event) {
         // const Toast = Swal.mixin({
         //   toast: true,
