@@ -63,8 +63,8 @@ const passport = require("passport");
 const router = require("./config/routes");
 
 const port1 = process.env.PORT1
-http.listen(port1, () => {
-  consoleLogger.info(`Socket Connected at port : ${port1}`);
+http.listen(port, () => {
+  consoleLogger.info(`Socket Connected at port : ${port}`);
 });
 io.on("connection", socket => {
   consoleLogger.info("Client Connected");
@@ -121,6 +121,6 @@ app.get("*", (req,res) =>{
     res.sendFile(path.join(__dirname + "/client/build/index.html"))
 })
 
-app.listen(port, () => {
-  consoleLogger.info("Listening on port", port);
-});
+// app.listen(port, () => {
+//   consoleLogger.info("Listening on port", port);
+// });
