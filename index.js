@@ -68,9 +68,6 @@ http.listen(port1, () => {
 });
 io.on("connection", socket => {
   consoleLogger.info("Client Connected");
-  socket.on("event", event => {
-    consoleLogger.info(event);
-  });
   socket.on("disconnect", () => {
     consoleLogger.warn("Client disconnected");
   });

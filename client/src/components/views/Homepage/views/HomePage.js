@@ -42,6 +42,25 @@ class HomePage extends Component {
         });
       }
     });
+    socket.on("err", error => {
+      if (error) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-left",
+          showConfirmButton: false,
+          timer: 1500,
+          onOpen: toast => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          }
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: "Too Many Requests"
+        });
+      }
+    });
   }
   handlePagination = e => {
     const { name } = e.target;

@@ -156,13 +156,14 @@ module.exports.search = async (req, res) => {
       consoleLogger.fatal({ error });
       res.send(error);
     }
-  });
-  let stream = client.stream("statuses/filter", { track: searchTerm });
-  stream.on("data", event => {
-    io.emit("event", event);
-  });
-  stream.on("error", function(error) {
-    consoleLogger.warn(error, "err");
+    let stream = client.stream("statuses/filter", { track: searchTerm });
+    stream.on("data", event => {
+      io.sockets.emit("event", event);
+    });
+    stream.on("error",(error) =>  {
+      console.log({error},'err')
+      io.sockets.emit("err",error);
+    });
   });
 };
 /**

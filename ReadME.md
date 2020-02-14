@@ -2,11 +2,12 @@
 #### Project Statement
 - Create an app to view twitter searches.
 #### Pre-Requisites
+##### IGNORE IF ENVIRONMENT IS ALREADY SET UP
 Download and Install [NodeJS](https://nodejs.org/en/)
 Install the package manager [npm](http://npmjs.com/).
 Use the package manager [npm](http://npmjs.com/) to install ReactJS.
 ```npm
-npm install --save react
+npm install --save create-react-app
 ```
 #### Initial Set-up
 Use the package manager [npm](http://npmjs.com/) to install node packages required.
