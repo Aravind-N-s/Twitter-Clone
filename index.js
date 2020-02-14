@@ -61,7 +61,8 @@ module.exports = {
  */
 const passport = require("passport");
 const router = require("./config/routes");
-http.listen(3001, () => {
+const socketPort = process.env.PORT1 || 3001
+http.listen(socketPort, () => {
   consoleLogger.info("Socket Connected at port :3001");
 });
 io.on("connection", socket => {
