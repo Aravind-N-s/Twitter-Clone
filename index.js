@@ -13,7 +13,6 @@ require("dotenv").config();
  * Importing mongoose connection
  */
 const { mongoose } = require("./config/database");
-const port = process.env.PORT;
 /**
  * Express is a Node.js web application framework
  * @const
@@ -27,7 +26,7 @@ const HttpStatus = require("http-status-codes");
  */
 const cors = require("cors");
 const app = express();
-const path = require("path")
+const path = require("path");
 /**
  * Cross Origin Resource Sharing (CORS) allows us to use Web applications within browsers when domains aren't the same
  * @function
@@ -49,10 +48,11 @@ app.use(express.json());
 const http = require("http").createServer(app);
 const socket = require("socket.io");
 const io = socket.listen(http);
-
+const port = process.env.PORT;
+const sockerPort = process.env.SOCKETPORT;
 module.exports = {
   socket,
-  io
+  io,
 };
 
 /**
@@ -62,11 +62,7 @@ module.exports = {
 const passport = require("passport");
 const router = require("./config/routes");
 
-const port1 = process.env.PORT1
-http.listen(port, () => {
-  consoleLogger.info(`Socket Connected at port : ${port}`);
-});
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   consoleLogger.info("Client Connected");
   socket.on("disconnect", () => {
     consoleLogger.warn("Client disconnected");
@@ -115,12 +111,15 @@ app.use("/user", router);
  * @param {function} root - Root Route
  * @param {object} router - Express Router
  */
-app.use(express.static(path.join(__dirname,"client/build")))
+app.use(express.static(path.join(__dirname, "client/build")));
 
-app.get("*", (req,res) =>{
-    res.sendFile(path.join(__dirname + "/client/build/index.html"))
-})
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
 
-// app.listen(port, () => {
-//   consoleLogger.info("Listening on port", port);
-// });
+http.listen(sockerPort, () => {
+  consoleLogger.info(`Socket Connected at port : ${sockerPort}`);
+});
+app.listen(port, () => {
+  consoleLogger.info(`Express Connected at port : ${port}`);
+});

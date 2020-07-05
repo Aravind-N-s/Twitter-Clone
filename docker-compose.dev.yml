@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    image: "mongo"
+    restart: always
+    container_name: "mongo"
+    ports:
+      - 27017:27017
+    logging:
+      driver: "none"
+  auth-dev:
+    build: .
+    container_name: "twitter_clone"
+    ports:
+      - 8080:3005
+    volumes:
+      - "/home/twitter-clone/node_modules"
+      - ".:/home/twitter-clone"
+    links:
+      - db
+    environment:
+      - NODE_ENV=development
+    env_file: .env
