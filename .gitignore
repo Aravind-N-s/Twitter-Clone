@@ -93,4 +93,8 @@ typings/
 .dynamodb/
 test/
 docs/
+
+#editor
+.vscode
+.idea
 # End of https://www.gitignore.io/api/node

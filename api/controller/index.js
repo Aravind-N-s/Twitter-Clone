@@ -99,7 +99,7 @@ module.exports.login = (req, res) => {
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
     logger.info(`-${user.email} was logged in.-`);
     return res
-      .status(HttpStatus.OK)
+      .status( )
       .json({ token, message: "User Details Listed." });
   } else {
     logger.error(`-User doesn't existed-`);
