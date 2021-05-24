@@ -41,7 +41,7 @@ const { logger, consoleLogger } = require("../../config/logger");
  * Socket values imported from index
  * @const
  */
-const { io } = require("../../index");
+const { io, socket } = require("../../index");
 /**
  * Controller to handle user registration
  * @name register
@@ -99,7 +99,7 @@ module.exports.login = (req, res) => {
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
     logger.info(`-${user.email} was logged in.-`);
     return res
-      .status( )
+      .status(HttpStatus.OK)
       .json({ token, message: "User Details Listed." });
   } else {
     logger.error(`-User doesn't existed-`);
@@ -157,9 +157,11 @@ module.exports.search = async (req, res) => {
       res.send(error);
     }
     let stream = client.stream("statuses/filter", { track: searchTerm });
-    stream.on("data", (event) => {
-      io.sockets.emit("event", event);
-    });
+    setTimeout(() => {
+      stream.on("data", (event) => {
+        io.sockets.emit("event", event);
+      });
+    }, 5000);
     stream.on("error", (error) => {
       console.log({ error }, "err");
       io.sockets.emit("err", error);
@@ -177,5 +179,7 @@ module.exports.search = async (req, res) => {
  * @param {Object} response - Response Object
  */
 module.exports.logout = (req, res) => {
+  client.disconnect();
+  socket.disconnect();
   res.json("User is logged Out");
 };
