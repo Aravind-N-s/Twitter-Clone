@@ -15,7 +15,7 @@ const client = new Twitter({
   consumer_key: process.env.CONSUMER_KEY,
   consumer_secret: process.env.CONSUMER_SECRET,
   access_token_key: process.env.ACCESS_TOKEN,
-  access_token_secret: process.env.ACCESS_TOKEN_SECRET
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 /**
  * An implementation of JSON Web Tokens in Node.JS.
@@ -41,7 +41,7 @@ const { logger, consoleLogger } = require("../../config/logger");
  * Socket values imported from index
  * @const
  */
-const { io } = require("../../index");
+const { io, socket } = require("../../index");
 /**
  * Controller to handle user registration
  * @name register
@@ -69,7 +69,7 @@ module.exports.register = async (req, res) => {
       "phone",
       "firstName",
       "lastName",
-      "name"
+      "name",
     ]);
     logger.info(`user was registered with the email ${user.email}`);
     return res
@@ -94,7 +94,7 @@ module.exports.login = (req, res) => {
     const tokenData = {
       _id: user._id,
       username: user.username,
-      createdAt: Number(new Date())
+      createdAt: Number(new Date()),
     };
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
     logger.info(`-${user.email} was logged in.-`);
@@ -102,10 +102,10 @@ module.exports.login = (req, res) => {
       .status(HttpStatus.OK)
       .json({ token, message: "User Details Listed." });
   } else {
-    logger.error(`-errors are existed-`);
+    logger.error(`-User doesn't existed-`);
     return res
       .status(HttpStatus.NOT_ACCEPTABLE)
-      .json({ err, message: "Please Try Again." });
+      .json({ user, message: "Please Try Again." });
   }
 };
 
@@ -128,7 +128,7 @@ module.exports.account = async (req, res) => {
     "phone",
     "firstName",
     "lastName",
-    "name"
+    "name",
   ]);
   logger.info(`-${responseData.email} was given his profile information in.-`);
   return res
@@ -157,12 +157,14 @@ module.exports.search = async (req, res) => {
       res.send(error);
     }
     let stream = client.stream("statuses/filter", { track: searchTerm });
-    stream.on("data", event => {
-      io.sockets.emit("event", event);
-    });
-    stream.on("error",(error) =>  {
-      console.log({error},'err')
-      io.sockets.emit("err",error);
+    setTimeout(() => {
+      stream.on("data", (event) => {
+        io.sockets.emit("event", event);
+      });
+    }, 5000);
+    stream.on("error", (error) => {
+      console.log({ error }, "err");
+      io.sockets.emit("err", error);
     });
   });
 };
@@ -177,5 +179,7 @@ module.exports.search = async (req, res) => {
  * @param {Object} response - Response Object
  */
 module.exports.logout = (req, res) => {
+  client.disconnect();
+  socket.disconnect();
   res.json("User is logged Out");
 };

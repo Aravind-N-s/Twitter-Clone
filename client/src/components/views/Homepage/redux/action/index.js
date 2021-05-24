@@ -2,7 +2,7 @@ import { chatAxios } from "../../../../utils/axios";
 export const startAddTweets = data => {
   return dispatch => {
     chatAxios
-      .post("user/stream",{searchTerm: data},
+      .post("/user/stream",{searchTerm: data},
         {headers: {
           "Authorization": `JWT ${localStorage.getItem("userAuthToken")}`
         }}
