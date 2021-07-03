@@ -2,39 +2,39 @@
  * @module strategy/jwt
  */
 
-/** 
-  * @namespace jwtStrategy
-  */
+/**
+ * @namespace jwtStrategy
+ */
 
-require('dotenv').config()
+require("dotenv").config();
 /**
  * Requiring passport
  * @const
  */
-const passport = require('passport')
+const passport = require("passport");
 /**
  * Mongoose Model for User.
  * @const
  */
-const {User} = require('../models')
+const { User } = require("../models");
 /**
  * Requiring JWTStrategy from passport
  * @const
  */
-const JWTStrategy = require('passport-jwt').Strategy
+const JWTStrategy = require("passport-jwt").Strategy;
 /**
  * Function which returns the JWT
  */
-const ExtractJWT = require('passport-jwt').ExtractJwt
+const ExtractJWT = require("passport-jwt").ExtractJwt;
 /**
  * @typedef {Object} options
  * @property {function} ExtractJWT - Function which returns JWT
  * @property {string} secretOrKey - JWT secret
  */
 const options = {
-    jwtFromRequest : ExtractJWT.fromAuthHeaderWithScheme('JWT'),
-    secretOrKey : process.env.TOKEN_SECRET
-}
+  jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme("JWT"),
+  secretOrKey: process.env.TOKEN_SECRET,
+};
 
 /**
  * Adding JWT Strategy
@@ -45,21 +45,21 @@ const options = {
  * @param {Object} JWTStrategyOptions - JWT Strategy Options
  */
 passport.use(
-    /**
-     * Callback Function
-     * @function
-     * @inner
-     * @param {object} jwtPayload - Decrypted JWT payload
-     * @param {callback} done - Next function
-     */
-    new JWTStrategy(options,(jwtPayload,done) =>{
-        User.findById({_id: jwtPayload._id})
-        .then(user =>{
-            if(user){
-                return done(null, user)
-            }
-            return done(null, false)
-        })
-        .catch(err => done(err))
-    })
-)
+  /**
+   * Callback Function
+   * @function
+   * @inner
+   * @param {object} jwtPayload - Decrypted JWT payload
+   * @param {callback} done - Next function
+   */
+  new JWTStrategy(options, (jwtPayload, done) => {
+    User.findById({ _id: jwtPayload._id })
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        }
+        return done(null, false);
+      })
+      .catch((err) => done(err));
+  })
+);

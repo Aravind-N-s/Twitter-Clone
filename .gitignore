@@ -98,3 +98,7 @@ docs/
 .vscode
 .idea
 # End of https://www.gitignore.io/api/node
+
+.git
+.jsdoc.*
+log*

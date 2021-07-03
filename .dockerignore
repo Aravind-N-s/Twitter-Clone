@@ -1,0 +1,11 @@
+.git
+.env
+client
+.jsdoc.conf.json
+.travis.yml
+**/*.test.js
+log-*
+*.md
+.dockerignore
+Dockerfile
+node_modules

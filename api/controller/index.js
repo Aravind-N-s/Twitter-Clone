@@ -9,8 +9,10 @@
  * Loading env variables to application
  */
 require("dotenv").config;
+
 const _ = require("lodash");
 const Twitter = require("twitter");
+
 const client = new Twitter({
   consumer_key: process.env.CONSUMER_KEY,
   consumer_secret: process.env.CONSUMER_SECRET,
@@ -72,6 +74,7 @@ module.exports = {
         .json({ responseData, message: "-User Is Sucessfully Registered-" });
     } catch (err) {
       const { errors } = err;
+      console.log({ errors });
       logger.error(`${Object.keys(errors)} errors are existed`);
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
@@ -91,7 +94,7 @@ module.exports = {
 
   async login({ user, route }, res) {
     logger.addContext("route", route.path);
-    if (user !== "error") {
+    if (user !== "User Not Found") {
       const tokenData = {
         _id: user._id,
         username: user.username,
@@ -110,8 +113,18 @@ module.exports = {
     }
   },
 
-  async account({ user, route }) {
-    logger.addContext("route", req.route.path);
+  /**
+   * Controller to handle user account data
+   * @name account
+   * @function
+   * @memberof module:api/controllers~userController
+   * @inner
+   * @param {Object} request - Request Object
+   * @param {Object} response - Response Object
+   */
+
+  async account({ user, route }, res) {
+    logger.addContext("route", route.path);
     const responseData = _.pick(user, [
       "_id",
       "username",
@@ -122,67 +135,60 @@ module.exports = {
       "name",
     ]);
     logger.info(
-      `-${responseData.email} was given his profile information in.-`,
+      `-${responseData.email} was given his profile information in.-`
     );
-    return res
-      .status(HttpStatus.OK)
-      .json({ responseData, message: "-User data sucessfully dispatched-" });
-  },
-};
-
-/**
- * Controller to handle user account data
- * @name account
- * @function
- * @memberof module:api/controllers~userController
- * @inner
- * @param {Object} request - Request Object
- * @param {Object} response - Response Object
- */
-// module.exports.account = async (req, res) => {};
-
-/**
- * Controller to handle user queries
- * @name account
- * @function
- * @memberof module:api/controllers~userController
- * @inner
- * @param {Object} request - Request Object
- * @param {Object} response - Response Object
- */
-module.exports.search = async (req, res) => {
-  logger.addContext("route", req.route.path);
-  const { searchTerm } = req.body;
-  let params = { q: searchTerm, count: 100 };
-  client.get("search/tweets", params, (error, tweets) => {
-    if (!error) {
-      res.json(tweets);
-    } else {
-      consoleLogger.fatal({ error });
-      res.send(error);
-    }
-    let stream = client.stream("statuses/filter", { track: searchTerm });
-    setTimeout(() => {
-      stream.on("data", (event) => {
-        io.sockets.emit("event", event);
-      });
-    }, 5000);
-    stream.on("error", (error) => {
-      console.log({ error }, "err");
-      io.sockets.emit("err", error);
+    return res.status(HttpStatus.OK).json({
+      responseData: {},
+      message: "-User data sucessfully dispatched-",
     });
-  });
+  },
+
+  /**
+   * Controller to handle user queries
+   * @name account
+   * @function
+   * @memberof module:api/controllers~userController
+   * @inner
+   * @param {Object} request - Request Object
+   * @param {Object} response - Response Object
+   */
+
+  async search(req, res) {
+    logger.addContext("route", req.route.path);
+    const { searchTerm } = req.body;
+    let params = { q: searchTerm, count: 100 };
+    client.get("search/tweets", params, (error, tweets) => {
+      if (!error) {
+        res.json(tweets);
+      } else {
+        consoleLogger.fatal({ error });
+        res.send(error);
+      }
+      let stream = client.stream("statuses/filter", { track: searchTerm });
+      setTimeout(() => {
+        stream.on("data", (event) => {
+          io.sockets.emit("event", event);
+        });
+      }, 5000);
+      stream.on("error", (error) => {
+        console.log({ error }, "err");
+        io.sockets.emit("err", error);
+      });
+    });
+  },
+
+  /**
+   * Controller to handle user logout
+   * Not Used
+   * @name logout
+   * @function
+   * @memberof module:api/controllers~userController
+   * @inner
+   * @param {Object} request - Request Object
+   * @param {Object} response - Response Object
+   */
 };
-/**
- * Controller to handle user logout
- * Not Used
- * @name logout
- * @function
- * @memberof module:api/controllers~userController
- * @inner
- * @param {Object} request - Request Object
- * @param {Object} response - Response Object
- */
+
 module.exports.logout = (req, res) => {
   client.disconnect();
   socket.disconnect();
