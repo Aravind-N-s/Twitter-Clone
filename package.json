@@ -31,7 +31,7 @@
     "log4js": "^6.1.2",
     "mongoose": "^5.12.5",
     "mongoose-unique-validator": "^2.0.3",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.6.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -43,7 +43,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "concurrently": "^5.1.0",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.7",
     "mocha": "^8.3.2",
     "nodemon": "^2.0.2",
     "react-native-slowlog": "^1.0.2"
