@@ -42,26 +42,76 @@ const { logger, consoleLogger } = require("../../config/logger");
  * @const
  */
 const { io, socket } = require("../../index");
-/**
- * Controller to handle user registration
- * @name register
- * @function
- * @memberof module:api/controllers~userController
- * @inner
- * @param {Object} request - Request Object
- * @param {Object} response - Response Object
- */
-module.exports.register = async (req, res) => {
-  logger.addContext("route", req.route.path);
-  const { body } = req;
-  const newUser = await User.create({ ...body }, async (err, user) => {
-    if (err) {
+
+module.exports = {
+  /**
+   * Controller to handle user registration
+   * @name register
+   * @function
+   * @memberof module:api/controllers~userController
+   * @inner
+   * @param {Object} request - Request Object
+   * @param {Object} response - Response Object
+   */
+  async register({ body, route }, res) {
+    logger.addContext("route", route.path);
+    try {
+      const user = await User.create({ ...body });
+      const responseData = _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "phone",
+        "firstName",
+        "lastName",
+        "name",
+      ]);
+      logger.info(`user was registered with the email ${user.email}`);
+      return res
+        .status(HttpStatus.OK)
+        .json({ responseData, message: "-User Is Sucessfully Registered-" });
+    } catch (err) {
       const { errors } = err;
       logger.error(`${Object.keys(errors)} errors are existed`);
       return res
         .status(HttpStatus.NOT_ACCEPTABLE)
         .json({ errors, message: "-User Cannot be Registed-" });
     }
+  },
+
+  /**
+   * Controller to handle user Login
+   * @name login
+   * @function
+   * @memberof module:api/controllers~userController
+   * @inner
+   * @param {Object} request - Request Object
+   * @param {Object} response - Response Object
+   */
+
+  async login({ user, route }, res) {
+    logger.addContext("route", route.path);
+    if (user !== "error") {
+      const tokenData = {
+        _id: user._id,
+        username: user.username,
+        createdAt: Number(new Date()),
+      };
+      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
+      logger.info(`-${user.email} was logged in.-`);
+      return res
+        .status(HttpStatus.OK)
+        .json({ token, message: "User Details Listed." });
+    } else {
+      logger.error(`-User doesn't existed-`);
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ user, message: "Please Try Again." });
+    }
+  },
+
+  async account({ user, route }) {
+    logger.addContext("route", req.route.path);
     const responseData = _.pick(user, [
       "_id",
       "username",
@@ -71,42 +121,13 @@ module.exports.register = async (req, res) => {
       "lastName",
       "name",
     ]);
-    logger.info(`user was registered with the email ${user.email}`);
+    logger.info(
+      `-${responseData.email} was given his profile information in.-`,
+    );
     return res
       .status(HttpStatus.OK)
-      .json({ responseData, message: "-User Is Sucessfully Registered-" });
-  });
-};
-
-/**
- * Controller to handle user Login
- * @name login
- * @function
- * @memberof module:api/controllers~userController
- * @inner
- * @param {Object} request - Request Object
- * @param {Object} response - Response Object
- */
-module.exports.login = (req, res) => {
-  logger.addContext("route", req.route.path);
-  const { user } = req;
-  if (user !== "error") {
-    const tokenData = {
-      _id: user._id,
-      username: user.username,
-      createdAt: Number(new Date()),
-    };
-    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET);
-    logger.info(`-${user.email} was logged in.-`);
-    return res
-      .status(HttpStatus.OK)
-      .json({ token, message: "User Details Listed." });
-  } else {
-    logger.error(`-User doesn't existed-`);
-    return res
-      .status(HttpStatus.NOT_ACCEPTABLE)
-      .json({ user, message: "Please Try Again." });
-  }
+      .json({ responseData, message: "-User data sucessfully dispatched-" });
+  },
 };
 
 /**
@@ -118,23 +139,7 @@ module.exports.login = (req, res) => {
  * @param {Object} request - Request Object
  * @param {Object} response - Response Object
  */
-module.exports.account = async (req, res) => {
-  logger.addContext("route", req.route.path);
-  const { user } = req;
-  const responseData = _.pick(user, [
-    "_id",
-    "username",
-    "email",
-    "phone",
-    "firstName",
-    "lastName",
-    "name",
-  ]);
-  logger.info(`-${responseData.email} was given his profile information in.-`);
-  return res
-    .status(HttpStatus.OK)
-    .json({ responseData, message: "-User data sucessfully dispatched-" });
-};
+// module.exports.account = async (req, res) => {};
 
 /**
  * Controller to handle user queries
