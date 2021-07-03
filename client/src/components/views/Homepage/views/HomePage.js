@@ -1,5 +1,4 @@
 import React, { Fragment, Component } from "react";
-import { isValid } from "../../../utils/service";
 import SearchField from "./CreateSearchRequest";
 import ViewTweet from "./ViewTweets";
 import io from "socket.io-client";
@@ -7,6 +6,7 @@ import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import { startAddTweets, updateTweets } from "../redux/action";
 import { CHAT_SERVICES } from "../../../utils/urls";
+import { isValid } from "../../../utils/service";
 
 class HomePage extends Component {
   constructor(props) {
@@ -15,81 +15,81 @@ class HomePage extends Component {
       searchData: "",
       searchDataError: "",
       pageNumber: 0,
-      prevSearch: ""
+      prevSearch: "",
     };
   }
 
   componentDidMount() {
-    const {dispatch} = this.props
+    const { dispatch } = this.props;
     const socket = io(CHAT_SERVICES);
-    socket.on("event", event => {
-      dispatch(updateTweets(event))
+    socket.on("event", (event) => {
+      dispatch(updateTweets(event));
       if (event) {
         const Toast = Swal.mixin({
           toast: true,
           position: "bottom-left",
           showConfirmButton: false,
           timer: 1500,
-          onOpen: toast => {
+          onOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
-          }
+          },
         });
 
         Toast.fire({
           icon: "info",
-          title: "New Tweet Available"
+          title: "New Tweet Available",
         });
       }
     });
-    socket.on("err", error => {
+    socket.on("err", (error) => {
       if (error) {
         const Toast = Swal.mixin({
           toast: true,
           position: "bottom-left",
           showConfirmButton: false,
           timer: 1500,
-          onOpen: toast => {
+          onOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
-          }
+          },
         });
 
         Toast.fire({
           icon: "error",
-          title: "Too Many Requests"
+          title: "Too Many Requests",
         });
       }
     });
   }
-  handlePagination = e => {
+  handlePagination = (e) => {
     const { name } = e.target;
     const { dispatch } = this.props;
     const { prevSearch } = this.state;
     if (name === "false") {
-      this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
+      this.setState((prevState) => ({ pageNumber: prevState.pageNumber + 1 }));
     } else {
       dispatch(startAddTweets(prevSearch));
     }
   };
-  handleChange = e => {
+  handleChange = (e) => {
     e.persist();
     this.setState(() => ({ [e.target.name]: e.target.value }));
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { dispatch } = this.props;
     const { searchData } = this.state;
     const searchDataError = isValid("fields", searchData);
     this.setState({
-      searchDataError
+      searchDataError,
     });
     if (searchDataError) return;
     dispatch(startAddTweets(searchData));
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       prevSearch: prevState.searchData,
-      searchData: ""
+      searchData: "",
     }));
   };
 
@@ -120,9 +120,9 @@ class HomePage extends Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    tweets: state.tweets
+    tweets: state.tweets,
   };
 };
 export default connect(mapStateToProps)(HomePage);

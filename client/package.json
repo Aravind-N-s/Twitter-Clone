@@ -5,7 +5,10 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
+    "browserslist": "^4.16.5",
     "cors": "^2.8.5",
+    "css-what": "^5.0.1",
+    "glob-parent": "^5.1.2",
     "lodash": "^4.17.21",
     "react": "^16.12.0",
     "react-dom": "^16.9.0",
@@ -17,7 +20,8 @@
     "react-tabs": "^3.0.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "socket.io-client": "^2.3.0",
+    "save-dev": "0.0.1-security",
+    "socket.io-client": "^4.1.2",
     "sweetalert2": "^9.7.2"
   },
   "scripts": {

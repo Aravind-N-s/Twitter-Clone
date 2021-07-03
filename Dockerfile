@@ -1,11 +1,15 @@
-FROM node:slim
+FROM node:10.3.0-slim
 
-WORKDIR /home/twitter-clone
+WORKDIR /home/backend-twitter
 
 COPY ./package.json ./
 
 RUN npm install
 
+EXPOSE 3005
+
+EXPOSE 3006
+
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
