@@ -1,0 +1,27 @@
+# file deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: twitter-frontend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: twitter-frontend
+  replicas: 1
+  template: 
+    metadata:
+      labels:
+        app: twitter-frontend
+        group: twitter-clone
+    spec:
+      containers: 
+        - name: frontend
+          image: aghora/twitter-frontend:v1
+          # ports: 
+          #   - containerPort: 3000
+          # imagePullPolicy: Never
+          # resources:
+          #   requests:
+          #     cpu: 20m

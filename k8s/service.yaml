@@ -1,0 +1,15 @@
+# file loadBalancer
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: twitter-frontend
+spec:
+  type: ClusterIP
+  selector: 
+    app: twitter-frontend
+  # ports:
+  #   - port: 8080
+  #     protocol: TCP
+  #     name: port
+  #     targetPort: 3000
