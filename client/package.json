@@ -4,25 +4,23 @@
   "private": true,
   "dependencies": {
     "axios": "^0.21.1",
-    "bootstrap": "^4.4.1",
-    "browserslist": "^4.16.5",
+    "bootstrap": "^4.6.0",
     "cors": "^2.8.5",
-    "css-what": "^5.0.1",
     "glob-parent": "^5.1.2",
     "lodash": "^4.17.21",
-    "react": "^16.12.0",
-    "react-dom": "^16.9.0",
-    "react-redux": "^7.1.3",
-    "react-router-dom": "^5.0.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",
     "react-scripts": "^4.0.3",
-    "react-select": "^3.0.5",
-    "react-tabs": "^3.0.0",
-    "redux": "^4.0.4",
+    "react-select": "^3.2.0",
+    "react-tabs": "^3.2.2",
+    "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "save-dev": "0.0.1-security",
     "socket.io-client": "^4.1.2",
-    "sweetalert2": "^9.7.2"
+    "sweetalert2": "^9.17.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -44,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "browserslist": "^4.16.6",
+    "css-what": "^5.0.1"
   }
 }

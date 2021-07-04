@@ -1,10 +1,12 @@
-FROM node:10.3.0-slim
+FROM node:12-alpine
 
-WORKDIR /home/backend-twitter
+WORKDIR /usr/src/api
 
-COPY ./package.json ./
+COPY package*.json ./
 
-RUN npm install
+RUN chmod 2777 "/usr/src/api"
+
+RUN npm install --pure-lockfile
 
 EXPOSE 3005
 

@@ -1,10 +1,12 @@
-FROM node:slim
+FROM node:12-alpine
 
-WORKDIR /home/frontend-twitter
+WORKDIR /usr/src/app
 
-COPY ./package.json ./
+COPY package*.json ./
 
-RUN npm install
+RUN chmod 2777 "/usr/src/app"
+
+RUN npm install --pure-lockfile
 
 EXPOSE 3000
 
