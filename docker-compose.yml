@@ -8,13 +8,18 @@ services:
   #     - 27017:27017
   #   logging:
   #     driver: "none"
+  proxy:
+    restart: always
+    build: ./nginx
+    ports: 
+      - '3000:80'
   frontend:
     container_name: "frontend-twitter"
     build: ./client
-    ports:
-      - 3000:3000
     logging:
         driver: "none"
+    # ports:
+    #   - 3000:3000
     # links:
     #   - db
     # environment:
@@ -29,10 +34,10 @@ services:
     build: .
     container_name: "backend-twitter"
     restart: always
-    ports:
-      - 3005:3005
-      - 3006:3006
     env_file: .env
+    # ports:
+    #   - 3005:3005
+    #   - 3006:3006
     # environment:
     #   - NODE_ENV=development
     #   - PORT=$PORT
