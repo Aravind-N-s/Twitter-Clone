@@ -1,0 +1,19 @@
+# file loadBalancer
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: twitter-backend
+spec:
+  type: ClusterIP
+  selector: 
+    app: twitter-backend
+  ports:
+    - port: 3005
+      protocol: TCP
+      name: backend
+      targetPort: 3005
+    - port: 3006
+      protocol: TCP
+      name: socket
+      targetPort: 3006

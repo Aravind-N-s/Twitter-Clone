@@ -8,9 +8,7 @@ RUN chmod 2777 "/usr/src/api"
 
 RUN npm install --pure-lockfile
 
-EXPOSE 3005
-
-EXPOSE 3006
+EXPOSE 9000
 
 COPY . .
 
