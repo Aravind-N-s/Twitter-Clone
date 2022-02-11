@@ -4,12 +4,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: twitter-backend
-  namespace: default
+  namespace: backend
 spec:
   selector:
     matchLabels:
       app: twitter-backend
-  replicas: 2
+  replicas: 1
   template: 
     metadata:
       labels:

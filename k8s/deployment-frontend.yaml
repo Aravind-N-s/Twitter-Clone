@@ -4,7 +4,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: twitter-frontend
-  namespace: default
+  namespace: backend
+  labels:
+    app: backend
 spec:
   selector:
     matchLabels:
@@ -14,14 +16,17 @@ spec:
     metadata:
       labels:
         app: twitter-frontend
-        group: twitter-clone
     spec:
       containers: 
         - name: frontend
           image: aghora/twitter-frontend:v1
+          resources:
+            requests:
+              memory: "1Mi"
+              cpu: "1m"
+            limits:
+              memory: "1Mi"
+              cpu: "1m"
           # ports: 
           #   - containerPort: 3000
           # imagePullPolicy: Never
-          # resources:
-          #   requests:
-          #     cpu: 20m
