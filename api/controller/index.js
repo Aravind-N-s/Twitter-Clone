@@ -56,6 +56,7 @@ module.exports = {
    * @param {Object} response - Response Object
    */
   async register({ body, route }, res) {
+    console.log({ body, route });
     logger.addContext("route", route.path);
     try {
       const user = await User.create({ ...body });

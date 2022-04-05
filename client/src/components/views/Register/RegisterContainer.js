@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { authAxios } from "../../utils/axios";
 import Form from "./Form";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { Header } from "../../utils/header";
 import { isValid } from "../../utils/service";
 import { withRouter } from "react-router-dom";
@@ -14,16 +14,16 @@ class RegisterContainer extends Component {
       password: "",
       usernameError: "",
       emailError: "",
-      passwordError: ""
+      passwordError: "",
     };
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     e.persist();
     this.setState(() => ({ [e.target.name]: e.target.value }));
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { username, email, password } = this.state;
     const emailError = isValid("email", email);
@@ -32,31 +32,31 @@ class RegisterContainer extends Component {
     this.setState({
       emailError,
       passwordError,
-      usernameError
+      usernameError,
     });
     const formData = {
       username: this.state.username,
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
     if (usernameError || emailError || passwordError) return;
     authAxios
       .post(`/user/register`, formData)
-      .then(response => {
+      .then((response) => {
         if (response.data.errors) {
           alert(response.data.errors);
         } else {
-          Swal.fire("Please Login")
+          Swal.fire("Please Login");
           this.props.history.push("/users/login");
         }
       })
-      .catch(err => {
-        const {errors} = err.response.data
-        if(errors){
-          Swal.fire('Email Is Already Registered with us please Login')
+      .catch((err) => {
+        const { errors } = err.response.data;
+        if (errors) {
+          Swal.fire("Email Is Already Registered with us please Login");
           this.props.history.push("/users/login");
-        }else{
-          Swal.fire(err)
+        } else {
+          Swal.fire(err);
         }
       });
   };
@@ -68,7 +68,10 @@ class RegisterContainer extends Component {
           handleBlur={() => this.props.history.push("/users/login")}
           context={this}
         />
-        <div className="container" style={{ padding: "20%", marginTop: "-15%"}}>
+        <div
+          className="container"
+          style={{ padding: "20%", marginTop: "-15%" }}
+        >
           <Form
             onHandleSubmit={this.handleSubmit}
             onHandleChange={this.handleChange}
