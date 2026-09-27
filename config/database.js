@@ -29,10 +29,6 @@ mongoose.Promise = global.Promise;
  * @property {Boolean} useCreateIndex Ask MongoDB to be able to identify unique fields
  * @property {Boolean} useFindAndModify New Mongoose option to be able to use findById() etc.
  */
-mongoose.set("useFindAndModify", false);
-mongoose.set("useCreateIndex", true);
-mongoose.set("useUnifiedTopology", true);
-
 const CONNECTION_URI = process.env.MONGODB_URI;
 
 /**
@@ -45,7 +41,7 @@ const CONNECTION_URI = process.env.MONGODB_URI;
  * @param {Boolean} useNewUrlParser To parser MongoDB connection strings
  */
 mongoose
-  .connect(CONNECTION_URI, { useNewUrlParser: true })
+  .connect(CONNECTION_URI)
   .then(() => {
     consoleLogger.info("Connected to the DB");
   })
