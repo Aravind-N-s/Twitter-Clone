@@ -46,12 +46,12 @@ app.use(cors());
  */
 app.use(express.json());
 const http = require("http").createServer(app);
-const socket = require("socket.io");
-const io = socket.listen(http);
+const { Server } = require("socket.io");
+const io = new Server(http);
 const port = process.env.PORT;
 const sockerPort = process.env.SOCKETPORT;
 module.exports = {
-  socket,
+  socket: require("socket.io"),
   io,
 };
 
